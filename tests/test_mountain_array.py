@@ -16,3 +16,11 @@ def test_initialized_mount_array(type_code, elems):
     candidate = MountainArray(elems, type_code)
     assert candidate.length() == 7
     assert candidate.toList() == [1, 2, 3, 4, 5, 3, 1]
+
+def test_large_mountain_array():
+    candidate = MountainArray([x for x in range(1000)] + [x for x in range(10000)])
+    assert candidate.length() == 11000
+    left = [x for x in range(10000)]
+    right = [x for x in range(1000)]
+    right.sort(reverse=True)
+    assert candidate.toList() == left + right # [1 .. 10000, 1000 .. 1]
