@@ -25,13 +25,16 @@ class MountainArray():
             raise RuntimeError('A MountainArray must contain at least 3 elements')
         self.__type_code = type_code
         self.__array = array(type_code, elems)
-        self._sort()
+        self.__sort()
 
-    def get(k: int):
-        """TODO"""
-        pass
+    def get(self, index: int):
+        """returns element at the index or None otherwise"""
+        try:
+            return self.__array[index]
+        except IndexError:
+            return None
 
-    def _sort(self) -> None:
+    def __sort(self) -> None:
         """sort left and right branches of this array"""
         left = array(self.__type_code, [])
         right = []  # list will be sorted in desc order and converted back to an array at the end
@@ -59,3 +62,49 @@ class MountainArray():
 
     def toList(self) -> []:
         return self.__array.tolist()
+
+
+class Solution():
+    def findMinimumIndex(self, target: int, mountain_arr: MountainArray) -> int:
+        length = mountain_arr.length()
+
+        # find peak
+        _left, _right = 1, length - 2  # because we know the peak is never at the edges
+        while _left <= _right:
+            _middle = (_left + _right) // 2
+            left, middle, right = mountain_arr.get(_middle - 1), mountain_arr.get(_middle), mountain_arr.get(
+                _middle + 1)
+            if left < middle < right:
+                _left = _middle + 1
+            elif left > middle > right:
+                _right = _middle - 1
+            else:
+                break # found
+        peak = middle
+
+        # search left portion
+        _left, _right = 0, peak
+        while _left <= _right:
+            _middle = (_left + _right) // 2
+            val = mountain_arr.get(_middle)
+            if val < target:
+                _left = _middle + 1
+            elif val > target:
+                _right = _middle - 1
+            else:
+                return _middle  # found
+
+        # search right portion
+        _left, _right = peak, length - 1
+        while _left <= _right:
+            _middle = (_left + _right) // 2
+            val = mountain_arr.get(_middle)
+            if val > target:
+                _left = _middle + 1
+            elif val < target:
+                _right = _middle - 1
+            else:
+                return _middle  # found
+
+        # element not found
+        return -1
