@@ -1,7 +1,7 @@
 import pytest
 import ctypes
 
-from py_ds.search.mountain_array import MountainArray
+from py_ds.search.mountain_array import MountainArray, Solution
 
 
 @pytest.mark.parametrize("type_code, elems", [
@@ -16,6 +16,17 @@ def test_initialized_mount_array(type_code, elems):
     candidate = MountainArray(elems, type_code)
     assert candidate.length() == 7
     assert candidate.toList() == [1, 2, 3, 4, 5, 3, 1]
+    # each internal array is balanced: [1, 2, 3, 4, 5, 3, 1]
+    assert candidate.get(0) == 1
+    assert candidate.get(1) == 2
+    assert candidate.get(2) == 3
+    assert candidate.get(3) == 4
+    assert candidate.get(4) == 5
+    assert candidate.get(5) == 3
+    assert candidate.get(6) == 1
+    # index error
+    assert candidate.get(7) == None
+
 
 def test_large_mountain_array():
     candidate = MountainArray([x for x in range(1000)] + [x for x in range(10000)])
@@ -23,4 +34,15 @@ def test_large_mountain_array():
     left = [x for x in range(10000)]
     right = [x for x in range(1000)]
     right.sort(reverse=True)
-    assert candidate.toList() == left + right # [1 .. 10000, 1000 .. 1]
+    assert candidate.toList() == left + right  # [1 .. 10000, 1000 .. 1]
+
+
+def test_solution_mountain_array():
+    elems = [1, 2, 3, 4, 5, 3, 1]
+    ma = MountainArray(elems)
+    candidate = Solution()
+    assert candidate.findMinimumIndex(1, ma) == 0
+    assert candidate.findMinimumIndex(2, ma) == 1
+    assert candidate.findMinimumIndex(3, ma) == 2
+    assert candidate.findMinimumIndex(4, ma) == 3
+    assert candidate.findMinimumIndex(5, ma) == 4
