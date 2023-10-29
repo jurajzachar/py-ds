@@ -38,6 +38,15 @@ class Array:
     def __iter__(self):
         return _ArrayIterator(self._elements)
 
+    def __str__(self):
+        val = "["
+        for idx in range(len(self)):
+            val += str(self._elements[idx])
+            if idx < len(self) - 1:
+                val += ","
+        val += "]"
+        return val
+
 
 class _ArrayIterator:
     def __init__(self, array):
