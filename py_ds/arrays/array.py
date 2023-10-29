@@ -9,8 +9,8 @@ class Array:
         assert size > 0, "Array size must be > 0"
         self._size = size
         # create array data structure using C's type module (allocates memory slots)
-        py_array_type = ctypes.py_object * size
-        self._elements = py_array_type
+        PyArrayType = ctypes.py_object * size
+        self._elements = PyArrayType()
         # initialize each slot
         self.clear(None)
 
