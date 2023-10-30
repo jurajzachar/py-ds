@@ -38,6 +38,19 @@ class Array:
     def __iter__(self):
         return _ArrayIterator(self._elements)
 
+    def __eq__(self, other: 'Array'):
+        if not isinstance(other, Array):
+            return False
+        if not len(other) == len(self):
+            return False
+        # deep elem comparison
+        isEqual = True
+        for idx in range(len(self)):
+            if other.__getitem__(idx) != self.__getitem__(idx):
+                isEqual = False
+                break
+        return isEqual
+
     def __str__(self):
         val = "["
         for idx in range(len(self)):

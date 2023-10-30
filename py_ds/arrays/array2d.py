@@ -4,6 +4,8 @@ from py_ds.arrays.array import Array
 class Array2D:
     def __init__(self, numRows, numCols):
         assert numRows, numCols > 0
+        self._numRows = numRows
+        self._numCols = numCols
         # create an array to store references for each row
         self._rows = Array(numRows)
         # create arrays for each row (an array of arrays)
@@ -16,7 +18,7 @@ class Array2D:
     def getNumOfRows(self):
         return len(self._rows)
 
-    def reset(self, value):
+    def clear(self, value):
         """clears the array and sets every element to the given value"""
         for c in range(self.getNumOfColumns()):
             self._rows[c].clear(value)
@@ -44,7 +46,24 @@ class Array2D:
 
     def zeros(self):
         """the same as reset, but set 0 as default value"""
-        self.reset(0)
+        self.clear(0)
+
+    def __iter__(self):
+        return _Array2DIterator(self._rows)
+
+
+    def __eq__(self, other):
+        if not isinstance(other, Array2D):
+            return False
+        if not other._numCols == self._numCols and other._numRows == self._numRows:
+            return False
+        # deep elem comparison
+        isEqual = True
+        for i in range(self._numRows):
+            if other._rows[i] != self._rows[i]:
+                isEqual = False
+                break
+        return isEqual
 
     def __str__(self) -> str:
         val = "array2d([\n"
@@ -54,7 +73,19 @@ class Array2D:
         val += "])"
         return val
 
-if __name__ == '__main__':
-    x = Array2D(2,3)
-    print(x)
 
+class _Array2DIterator:
+    def __init__(self, rows):
+        self._rowsRef = rows
+        self._curIndex = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self) -> Array:
+        if self._curIndex < len(self._rowsRef):
+            column: Array = self._rowsRef[self._curIndex]
+            self._curIndex += 1
+            return column
+        else:
+            raise StopIteration
