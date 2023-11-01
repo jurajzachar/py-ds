@@ -58,12 +58,12 @@ class Array2D:
         if not other._numCols == self._numCols and other._numRows == self._numRows:
             return False
         # deep elem comparison
-        isEqual = True
+        is_equal = True
         for i in range(self._numRows):
             if other._rows[i] != self._rows[i]:
-                isEqual = False
+                is_equal = False
                 break
-        return isEqual
+        return is_equal
 
     def __str__(self) -> str:
         val = "array2d([\n"

@@ -4,7 +4,7 @@ import ctypes
 class Array:
     """this is simple array implementation using ctypes"""
 
-    def __init__(self, size):
+    def __init__(self, size: int):
         """creates an aray with size elements"""
         assert size > 0, "Array size must be > 0"
         self._size = size
@@ -13,6 +13,13 @@ class Array:
         self._elements = PyArrayType()
         # initialize each slot
         self.clear(None)
+
+    @classmethod
+    def of(cls, *elems) -> ctypes.Array:
+        obj = cls(len(elems))
+        for idx in range(len(elems)):
+            obj.__setitem__(idx, elems[idx])
+        return obj
 
     def __len__(self):
         return self._size
