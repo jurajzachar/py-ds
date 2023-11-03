@@ -11,7 +11,7 @@ def zero_matrix() -> Matrix:
     return Matrix(SIZE, SIZE)
 
 
-def test_initilize_matrix(zero_matrix: Matrix):
+def test_initialize_matrix(zero_matrix: Matrix):
     assert zero_matrix.getNumOfColumns() == SIZE
     assert zero_matrix.getNumOfRows() == SIZE
     for row in range(SIZE):
