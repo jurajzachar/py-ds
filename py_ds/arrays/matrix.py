@@ -2,6 +2,8 @@
 gular grid of a fixed size. The elements of the matrix can be accessed by specifying
 a given row and column index with indices starting at 0.
 """
+from typing import Any
+
 from py_ds.arrays.array import Array
 from py_ds.arrays.array2d import Array2D
 
@@ -49,15 +51,63 @@ class Matrix():
 
     def transpose(self):
         """return a new matrix that is the transpose of this matrix"""
-        pass
+        newNrRows = self.getNumOfColumns()
+        newNrCols = self.getNumOfRows()
+        transposed = Array2D(newNrRows, newNrCols)
+        for ridx in range(self.getNumOfRows()):
+            for cidx in range(self.getNumOfColumns()):
+                value = self.__getitem__((ridx, cidx))
+                transposed.__setitem__((cidx, ridx), value)
+        self.__matrix = transposed
 
-    def add(self, rhsMatrix):
+    def __applyOperator(self, rhsMatrix: 'Matrix', func, row_index: int, column_index: int) -> None:
+        value = self.__operator(rhsMatrix, func, row_index, column_index)
+        self.__setitem__((row_index, column_index), value)
+
+    def __operator(self, rhsMatrix: 'Matrix', func, row_index: int, column_index: int) -> Any:
+        return func(self.__getitem__((row_index, column_index)), rhsMatrix.__getitem__((row_index, column_index)))
+
+    def add(self, rhsMatrix: 'Matrix') -> None:
         """creates and returns a new matrix that is the result of adding this matrix to the given rhsMatrix. The size of
         the two matrices must be the same"""
-        pass
+        """creates and returns a new matrix that is the result of adding this matrix to the given rhsMatrix. The size of
+              the two matrices must be the same"""
+        assert self.getNumOfRows() == rhsMatrix.getNumOfRows(), "Number of rows must be the same"
+        assert self.getNumOfColumns() == rhsMatrix.getNumOfColumns(), "Number of columns must be the same"
+        for ridx in range(self.getNumOfRows()):
+            for cidx in range(self.getNumOfColumns()):
+                self.__applyOperator(rhsMatrix, (lambda x, y: x + y), ridx, cidx)
 
-    def subtract(self, rhsMatrix):
+    def subtract(self, rhsMatrix: 'Matrix'):
         """the same as Matrix.add() operation but subtracts the two matrices"""
+        """creates and returns a new matrix that is the result of adding this matrix to the given rhsMatrix. The size of
+              the two matrices must be the same"""
+        assert self.getNumOfRows() == rhsMatrix.getNumOfRows(), "Number of rows must be the same"
+        assert self.getNumOfColumns() == rhsMatrix.getNumOfColumns(), "Number of columns must be the same"
+        for ridx in range(self.getNumOfRows()):
+            for cidx in range(self.getNumOfColumns()):
+                self.__applyOperator(rhsMatrix, (lambda x, y: x - y), ridx, cidx)
+
+    def multiply(self, rhsMatrix: 'Matrix'):
+        """ Creates and returns a new matrix resulting from matrix multiplication.
+        Multiplication. Matrix multiplication is only defined for matrices where the number of columns in the matrix on
+        the lefthand side is equal to the number of rows in the matrix on the righthand side. The result is a new matrix
+        that contains the same number of rows as the matrix on the lefthand side and the same number of columns as the
+        matrix on the righthand side. In other words, given a matrix of size m × n multiplied by a matrix of size n × p,
+        the resulting matrix is of size m × p. In multiplying two matrices, each element of the new matrix is the result
+        of summing the product of a row in the lefthand side matrix by a column in the righthand side matrix.
+        """
+        assert self.getNumOfRows() == rhsMatrix.getNumOfColumns(), "Number columns must equal the other number of rows"
+        assert self.getNumOfColumns() == rhsMatrix.getNumOfRows(), "Number of rows must equal the other number of columns"
+        multiplied = Array2D(
+            max(self.getNumOfRows(), rhsMatrix.getNumOfRows()),
+            max(self.getNumOfColumns(), rhsMatrix.getNumOfColumns())
+        )
+        for ridx in range(multiplied.getNumOfRows()):
+            for cidx in range(multiplied.getNumOfColumns()):
+                print(f'calculating=c({ridx},{cidx})')
+
+        # TODO
         pass
 
     def __eq__(self, other):
@@ -70,20 +120,15 @@ class Matrix():
 
     def __str__(self):
         def print_row(row) -> str:
-            val = "|\t"
+            token = "|\t"
             for idx in range(len(row)):
-                val += str(row[idx])
+                token += str(row[idx])
                 if idx < len(row) - 1:
-                    val += "\t"
-            val += "\t|\n"
-            return val
+                    token += "\t"
+            token += "\t|\n"
+            return token
 
-        val = "\nmatrix\n"
+        val = "\nMatrix\n"
         for array in self.__matrix:
             val += print_row(array)
-
         return val
-
-
-if __name__ == '__main__':
-    print(Matrix.of(Array.of(10, 10), Array.of(1, 9)))

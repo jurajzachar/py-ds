@@ -10,7 +10,7 @@ class Array:
         self._size = size
         # create array data structure using C's type module (allocates memory slots)
         PyArrayType = ctypes.py_object * size
-        self._elements = PyArrayType()
+        self.__elements = PyArrayType()
         # initialize each slot
         self.clear(None)
 
@@ -30,20 +30,20 @@ class Array:
     def __getitem__(self, index):
         """get content of the array at index position"""
         self.__ensure_valid_index(index)
-        return self._elements[index]
+        return self.__elements[index]
 
     def __setitem__(self, index, value) -> None:
         """puts the value in the array element at index position"""
         self.__ensure_valid_index(index)
-        self._elements[index] = value
+        self.__elements[index] = value
 
     def clear(self, value) -> None:
         """clears the array by setting each element to the given value"""
         for i in range(len(self)):
-            self._elements[i] = value
+            self.__elements[i] = value
 
     def __iter__(self):
-        return _ArrayIterator(self._elements)
+        return _ArrayIterator(self.__elements)
 
     def __eq__(self, other: 'Array'):
         if not isinstance(other, Array):
@@ -61,7 +61,7 @@ class Array:
     def __str__(self):
         val = "["
         for idx in range(len(self)):
-            val += str(self._elements[idx])
+            val += str(self.__elements[idx])
             if idx < len(self) - 1:
                 val += ","
         val += "]"

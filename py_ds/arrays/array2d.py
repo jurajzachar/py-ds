@@ -20,13 +20,13 @@ class Array2D:
 
     def clear(self, value):
         """clears the array and sets every element to the given value"""
-        for c in range(self.getNumOfColumns()):
+        for c in range(self.getNumOfRows()):
             self._rows[c].clear(value)
 
     def __ensure_valid_indices(self, row, column):
         assert 0 <= row < self.getNumOfRows() \
-        and 0 <= column < self.getNumOfColumns(), \
-        "Array subscription out of range"
+               and 0 <= column < self.getNumOfColumns(), \
+            "Array subscription out of range"
 
     def __getitem__(self, ndxTuple):
         assert len(ndxTuple) == 2, "Invalid number of array subscripts."
@@ -50,7 +50,6 @@ class Array2D:
 
     def __iter__(self):
         return _Array2DIterator(self._rows)
-
 
     def __eq__(self, other):
         if not isinstance(other, Array2D):
