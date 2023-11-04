@@ -62,8 +62,10 @@ def test_should_subtract(some_matrix):
 
 def test_should_multiply():
     a = Matrix.of(Array.of(0, 1), Array.of(2, 3), Array.of(4, 5))
+    print(a)
     b = Matrix.of(Array.of(6, 7, 8), Array.of(9, 1, 0))
-    a.multiply(b)
+    print(b)
+    res = a.multiply(b)
+    print(res)
     expected = Matrix.of(Array.of(9, 1, 0), Array.of(39, 17, 16), Array.of(69, 33, 32))
-    assert a == expected
-    assert b == expected
+    assert res == expected

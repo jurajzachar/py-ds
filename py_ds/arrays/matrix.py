@@ -88,7 +88,7 @@ class Matrix():
             for cidx in range(self.getNumOfColumns()):
                 self.__applyOperator(rhsMatrix, (lambda x, y: x - y), ridx, cidx)
 
-    def multiply(self, rhsMatrix: 'Matrix'):
+    def multiply(self, rhsMatrix: 'Matrix') -> 'Matrix':
         """ Creates and returns a new matrix resulting from matrix multiplication.
         Multiplication. Matrix multiplication is only defined for matrices where the number of columns in the matrix on
         the lefthand side is equal to the number of rows in the matrix on the righthand side. The result is a new matrix
@@ -99,16 +99,18 @@ class Matrix():
         """
         assert self.getNumOfRows() == rhsMatrix.getNumOfColumns(), "Number columns must equal the other number of rows"
         assert self.getNumOfColumns() == rhsMatrix.getNumOfRows(), "Number of rows must equal the other number of columns"
-        multiplied = Array2D(
+        multiplied = Matrix(
             max(self.getNumOfRows(), rhsMatrix.getNumOfRows()),
             max(self.getNumOfColumns(), rhsMatrix.getNumOfColumns())
         )
-        for ridx in range(multiplied.getNumOfRows()):
-            for cidx in range(multiplied.getNumOfColumns()):
-                print(f'calculating=c({ridx},{cidx})')
-
-        # TODO
-        pass
+        multiplied.__matrix.zeros()
+        for a_ridx in range(self.getNumOfRows()):
+            for b_cidx in range(rhsMatrix.getNumOfColumns()):
+                for b_ridx in range(rhsMatrix.getNumOfRows()):
+                    tmp = multiplied.__getitem__((a_ridx, b_cidx))
+                    tmp += self.__getitem__((a_ridx, b_ridx)) * rhsMatrix.__getitem__((b_ridx, b_cidx))
+                    multiplied.__setitem__((a_ridx, b_cidx), tmp)
+        return multiplied
 
     def __eq__(self, other):
         if not isinstance(other, Matrix):
