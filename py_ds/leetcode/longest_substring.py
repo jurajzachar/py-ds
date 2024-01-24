@@ -39,8 +39,7 @@ def lengthOfLongestSubstring(s: str) -> int:
         elem = l[idx]
         uniq = set(elem)
 
-        while idx + 1 < len(s):
-            idx += 1
+        while (idx := idx + 1) < len(s):
             elem = l[idx]
             # found a unique character
             if elem not in uniq:
