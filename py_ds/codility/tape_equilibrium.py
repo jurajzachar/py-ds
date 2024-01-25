@@ -41,8 +41,19 @@ Write an efficient algorithm for the following assumptions:
         N is an integer within the range [2..100,000];
         each element of array A is an integer within the range [−1,000..1,000].
 """
+import time
 from typing import List
 
+
+def solution_efficient(a: List[int]) -> int:
+    sum_front, sum_back = 0, sum(a)
+    diff_list = []
+    for elm in a:
+        sum_front += elm
+        sum_back -= elm
+        diff_list.append(abs(sum_front - sum_back))
+
+    return min(diff_list)
 
 def solution(a: List[int]) -> int:
     """
@@ -59,8 +70,12 @@ def solution(a: List[int]) -> int:
     return min_sum
 
 if __name__ == '__main__':
-    a = [3,1,2,4,3]
-    answer = solution(a)
+    a = [x for x in range(100 * 1000 - 1)]
+    start = time.perf_counter()
+    answer = solution_efficient(a)
+    end = time.perf_counter()
+
+    print(f"solution found in {end - start}")
     print(answer)
 
-    assert answer == 1
+    assert answer == 16611
