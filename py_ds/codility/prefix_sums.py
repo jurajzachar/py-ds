@@ -12,7 +12,7 @@ def prefix_sums(a: List[int]) -> List[int]:
     return p
 
 if __name__ == '__main__':
-    a = [x for x in range(1, 11)]
+    a = [x for x in range(0, 5)]
     print(a)
     ps = prefix_sums(a)
     print(ps)
