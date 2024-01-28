@@ -34,7 +34,7 @@ def lengthOfLongestSubstring(s: str) -> int:
     # minimum length of any given string
     answer = 1
 
-    for i in range(0, len(l)):
+    for i in range(len(l)):
         idx = i
         elem = l[idx]
         uniq = set(elem)
