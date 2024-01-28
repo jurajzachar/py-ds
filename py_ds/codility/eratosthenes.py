@@ -24,3 +24,4 @@ def solution(n: int) -> List[int]:
 
 if __name__ == '__main__':
     answer = solution(100)
+    print(answer)
